@@ -49,27 +49,21 @@ func (r *Reporter) SetTotalStore(rows Rowsy) {
 
 func (r *Reporter) Exec(w io.Writer) error {
 
-	file := xlsx.NewFile()
-	sh, err := file.AddSheet("Sheet1")
-	if err != nil {
-		return err
-	}
+	r.renderTitle(r.sh)
 
-	r.renderTitle(sh)
-
-	r.renderHeader(sh)
+	r.renderHeader(r.sh)
 
 	if r.totalPosition == TOTAL_TOP || r.totalPosition == TOTAL_TOP_BOTTOM {
-		r.renderTotal(sh)
+		r.renderTotal(r.sh)
 	}
 
-	r.renderRows(sh)
+	r.renderRows(r.sh)
 
 	if r.totalPosition == TOTAL_BOTTOM || r.totalPosition == TOTAL_TOP_BOTTOM {
-		r.renderTotal(sh)
+		r.renderTotal(r.sh)
 	}
 
-	return file.Write(w)
+	return r.file.Write(w)
 }
 
 func (r *Reporter) renderTitle(sh *xlsx.Sheet) {

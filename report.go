@@ -17,5 +17,6 @@ type ReportFromTable struct {
 
 type ReportFromMap struct {
 	*report
+	cols []string
 	rows []map[string]interface{}
 }

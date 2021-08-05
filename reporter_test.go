@@ -27,21 +27,31 @@ func TestExec(t *testing.T) {
 		fmt.Println(err)
 	}
 
+	if file, err := os.Create("test1.xlsx"); err != nil {
+		fmt.Println(err)
+	} else {
+		file.Write(buf.Bytes())
+		file.Close()
+	}
+
 	payloadMap := []map[string]interface{}{
 		{
 			"num":        1,
-			"data":       "Шинима хуйня",
+			"data":       "Some data",
 			"Дата время": time.Now(),
 		},
 		{
 			"num":        2,
-			"data":       "Другая дата",
+			"data":       "Something else data",
 			"Дата время": time.Now(),
 		},
 		{
 			"num":        3,
-			"data":       "И третья дата",
+			"data":       "Third data",
 			"Дата время": time.Now(),
+		},
+		{
+			"new column": "There's something here",
 		},
 	}
 
@@ -50,22 +60,10 @@ func TestExec(t *testing.T) {
 	reporter.FromMap(payloadMap)
 	reporter.Exec(buf)
 
-	err = rep.Exec(buf)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	if file, err := os.Create("detail1.xlsx"); err != nil {
+	if file, err := os.Create("test2.xlsx"); err != nil {
 		fmt.Println(err)
 	} else {
 		file.Write(buf.Bytes())
-		defer file.Close()
-	}
-
-	if file, err := os.Create("detail.xlsx"); err != nil {
-		fmt.Println(err)
-	} else {
-		file.Write(buf.Bytes())
-		defer file.Close()
+		file.Close()
 	}
 }

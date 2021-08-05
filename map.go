@@ -27,10 +27,27 @@ func (r *ReportFromMap) Columns() ([]string, error) {
 		columns = append(columns, col)
 	}
 
+	r.cols = columns
+
 	return columns, nil
 }
 
 func (r *ReportFromMap) SliceScan() ([]interface{}, error) {
-	// TODO::
-	return []interface{}{}, nil
+
+	res := []interface{}{}
+
+	row := r.rows[r.currentRow]
+	for _, col := range r.cols {
+		if val, ok := row[col]; ok {
+			res = append(res, val)
+		} else {
+			res = append(res, "")
+		}
+	}
+
+	defer func() {
+		r.currentRow += 1
+	}()
+
+	return res, nil
 }
