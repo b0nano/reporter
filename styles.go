@@ -9,10 +9,11 @@ const (
 )
 
 const (
-	BgColor     = "#FFFFFFCC"
-	FgColor     = "#FFDDE8CB"
-	BGWhite     = "#FFFFFFFF"
-	BorderColor = "#FFB4AE9E"
+	BgColor     = "FFFFFFCC"
+	HFgColor    = "FFE3DEBF"
+	TFgColor    = "FFE8E4CB"
+	BGWhite     = "FFFFFFFF"
+	BorderColor = "FFB4AE9E"
 )
 
 var (
@@ -28,9 +29,15 @@ var (
 	}
 
 	Fill = xlsx.Fill{
-		PatternType: "solid",
-		FgColor:     FgColor,
-		//BgColor:     FgColor,
+		PatternType: xlsx.Solid_Cell_Fill,
+		FgColor:     HFgColor,
+		BgColor:     BgColor,
+	}
+
+	TFill = xlsx.Fill{
+		PatternType: xlsx.Solid_Cell_Fill,
+		FgColor:     TFgColor,
+		BgColor:     BgColor,
 	}
 
 	TitleStyle = &xlsx.Style{
@@ -51,6 +58,13 @@ var (
 		ApplyBorder:    true,
 		Fill:           Fill,
 		ApplyFill:      true,
+	}
+
+	TotalCellStyle = &xlsx.Style{
+		Border:      Border,
+		ApplyBorder: true,
+		Fill:        TFill,
+		ApplyFill:   true,
 	}
 
 	CellStyle = &xlsx.Style{

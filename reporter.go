@@ -5,7 +5,6 @@ import (
 	"io"
 	"time"
 
-	// "github.com/sirupsen/logrus"
 	"github.com/tealeg/xlsx"
 )
 
@@ -27,7 +26,7 @@ type Reporter struct {
 
 func ReporterNew(name string) *Reporter {
 	file := xlsx.NewFile()
-	sheet, _ := file.AddSheet("Sheet1")
+	sheet, _ := file.AddSheet("sheet1")
 	return &Reporter{
 		name: name,
 		file: file,
@@ -43,25 +42,17 @@ func (r *Reporter) SetTotalPosition(position int) {
 	r.totalPosition = position
 }
 
-func (r *Reporter) SetTotalStore(rows Rowsy) {
-	r.totalStore = rows
+func (r *Reporter) SetStores(rows, totalRows Rowsy) {
+	r.store = rows
+	r.totalStore = totalRows
 }
 
 func (r *Reporter) Exec(w io.Writer) error {
 
 	r.renderTitle(r.sh)
-
 	r.renderHeader(r.sh)
-
-	if r.totalPosition == TOTAL_TOP || r.totalPosition == TOTAL_TOP_BOTTOM {
-		r.renderTotal(r.sh)
-	}
-
 	r.renderRows(r.sh)
-
-	if r.totalPosition == TOTAL_BOTTOM || r.totalPosition == TOTAL_TOP_BOTTOM {
-		r.renderTotal(r.sh)
-	}
+	r.renderTotal(r.sh)
 
 	return r.file.Write(w)
 }
@@ -142,7 +133,7 @@ func RenderRows(store Rowsy, sh *xlsx.Sheet, style *xlsx.Style) {
 }
 
 func (r *Reporter) renderTotal(sh *xlsx.Sheet) {
-	RenderRows(r.totalStore, sh, CellStyle)
+	RenderRows(r.totalStore, sh, TotalCellStyle)
 }
 
 func (r *Reporter) renderRows(sh *xlsx.Sheet) {

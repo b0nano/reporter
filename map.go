@@ -1,8 +1,8 @@
 package reporter
 
-// Reporter FromMap - make reporter from map
-func (r *Reporter) FromMap(rows []map[string]interface{}) {
-	r.store = &ReportFromMap{
+//FromMap - make report from map
+func FromMap(rows []map[string]interface{}) *ReportMap {
+	return &ReportMap{
 		report: &report{
 			maxRows: len(rows),
 		},
@@ -10,11 +10,11 @@ func (r *Reporter) FromMap(rows []map[string]interface{}) {
 	}
 }
 
-func (r *ReportFromMap) Next() bool {
+func (r *ReportMap) Next() bool {
 	return next(r.report)
 }
 
-func (r *ReportFromMap) Columns() ([]string, error) {
+func (r *ReportMap) Columns() ([]string, error) {
 	columns := []string{}
 	colNames := map[string]struct{}{}
 	for _, row := range r.rows {
@@ -32,7 +32,7 @@ func (r *ReportFromMap) Columns() ([]string, error) {
 	return columns, nil
 }
 
-func (r *ReportFromMap) SliceScan() ([]interface{}, error) {
+func (r *ReportMap) SliceScan() ([]interface{}, error) {
 
 	res := []interface{}{}
 

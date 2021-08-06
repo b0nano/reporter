@@ -8,22 +8,21 @@ import (
 // Reporter FromTable - make reporter from table.
 // If 'hpos' < 0, then has no header.
 // Else header position always a first row
-func (r *Reporter) FromTable(rows [][]interface{}, hpos int) {
-	r.store = &ReportFromTable{
+func FromTable(rows [][]interface{}, hpos int) *ReportTable {
+	return &ReportTable{
 		report: &report{
 			maxRows: len(rows),
 			hpos:    hpos,
 		},
 		rows: rows,
 	}
-
 }
 
-func (r *ReportFromTable) Next() bool {
+func (r *ReportTable) Next() bool {
 	return next(r.report)
 }
 
-func (r *ReportFromTable) Columns() ([]string, error) {
+func (r *ReportTable) Columns() ([]string, error) {
 	if len(r.rows) == 0 {
 		return []string{}, errors.New("empty rows")
 	}
@@ -58,7 +57,7 @@ func (r *ReportFromTable) Columns() ([]string, error) {
 	return header, nil
 }
 
-func (r *ReportFromTable) SliceScan() ([]interface{}, error) {
+func (r *ReportTable) SliceScan() ([]interface{}, error) {
 	defer func() {
 		r.currentRow += 1
 	}()

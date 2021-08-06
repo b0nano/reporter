@@ -1,20 +1,20 @@
 package reporter
 
 // Reporter From Rows - make reporter from query rows
-func (r *Reporter) FromRows(rows Rowsy) {
-	r.store = &ReportFromRows{
+func FromRows(rows Rowsy) *ReportRows {
+	return &ReportRows{
 		rows: rows,
 	}
 }
 
-func (r *ReportFromRows) Next() bool {
+func (r *ReportRows) Next() bool {
 	return r.rows.Next()
 }
 
-func (r *ReportFromRows) Columns() ([]string, error) {
+func (r *ReportRows) Columns() ([]string, error) {
 	return r.rows.Columns()
 }
 
-func (r *ReportFromRows) SliceScan() ([]interface{}, error) {
+func (r *ReportRows) SliceScan() ([]interface{}, error) {
 	return r.rows.SliceScan()
 }

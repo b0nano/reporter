@@ -6,16 +6,16 @@ type report struct {
 	hpos       int
 }
 
-type ReportFromRows struct {
+type ReportRows struct {
 	rows Rowsy
 }
 
-type ReportFromTable struct {
+type ReportTable struct {
 	*report
 	rows [][]interface{}
 }
 
-type ReportFromMap struct {
+type ReportMap struct {
 	*report
 	cols []string
 	rows []map[string]interface{}

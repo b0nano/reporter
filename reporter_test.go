@@ -10,6 +10,9 @@ import (
 
 func TestExec(t *testing.T) {
 
+	var report Rowsy
+	var reportTotal Rowsy
+
 	buf := bytes.NewBuffer([]byte{})
 	payloadTable := [][]interface{}{
 		{"num", "first", "second", "third", "name", "surname", "phone"},
@@ -18,13 +21,21 @@ func TestExec(t *testing.T) {
 		{3, "third string", -59.10, 300, "Bob", "Uncle", "49500000000"},
 	}
 
-	rep := ReporterNew("")
-	rep.SetTitle("Test from table")
-	rep.FromTable(payloadTable, 0)
+	payloadtotal := [][]interface{}{
+		{"Total:", "", 300.0, 0.5, "", "vscode"},
+	}
 
-	err := rep.Exec(buf)
+	report = FromTable(payloadTable, 0)
+	reportTotal = FromTable(payloadtotal, -1)
+
+	reporter := ReporterNew("")
+	reporter.SetTotalPosition(TOTAL_TOP_BOTTOM)
+	//reporter.SetTitle("Report from table with total row")
+	reporter.SetStores(report, reportTotal)
+	err := reporter.Exec(buf)
 	if err != nil {
 		fmt.Println(err)
+		os.Exit(1)
 	}
 
 	if file, err := os.Create("test1.xlsx"); err != nil {
@@ -55,10 +66,16 @@ func TestExec(t *testing.T) {
 		},
 	}
 
-	reporter := ReporterNew("Test from map")
-	reporter.SetTitle("test from map")
-	reporter.FromMap(payloadMap)
-	reporter.Exec(buf)
+	report = FromMap(payloadMap)
+	reporter = ReporterNew("Test from map")
+	reporter.SetTitle("Test from map")
+	reporter.SetStores(report, nil)
+
+	err = reporter.Exec(buf)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 
 	if file, err := os.Create("test2.xlsx"); err != nil {
 		fmt.Println(err)
